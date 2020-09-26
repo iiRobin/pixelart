@@ -1,11 +1,9 @@
 <template>
   <div class="width-auto uk-padding-remove">
       <div class="grid">
-          <div class="horizontal" v-for="h_item in width" :key="h_item">
-              <div :id="'h-cell-'+ h_item" class="cell" @mousedown.prevent="handleCellClick"></div>
-              <div class="vertical" v-for="v_item in height" :key="v_item">
-                  <div :id="'v-cell-'+ v_item" class="cell" @mousedown.prevent="handleCellClick"></div>
-              </div>
+          <div v-for="h_item in width" :key="h_item">
+              <div :id="'h-cell-'+ h_item" class="cell" @mousedown.prevent="handleCellClick" @mouseover="handleCellClick"></div>
+              <div v-for="v_item in height" :key="v_item" :id="'v-cell-'+ v_item" class="cell" @mousedown.prevent="handleCellClick" @mouseover="handleCellClick"></div>
           </div>
       </div>
   </div>
@@ -20,38 +18,42 @@ export default {
 
     data () {
         return {
-            width: 56,
-            height: 25,
+            width: null,
+            height: null,
         }
     },
 
 
-    mounted () {
-        document.querySelectorAll(".cell").forEach((cell) => {
-            cell.addEventListener('mouseover', (e) => {
-                if(e.buttons == 1) {
-                    this.handleCellClick(e)
-                }
-            })
-        })
-
-        this.handleShortcut()
+    created () {
+        this.calculateWidth()
+        this.calculateHeight()
     },
+
+
+    mounted () {
+        this.handleShortcut()
+
+        $(window).resize(() => {
+            this.calculateWidth()
+            this.calculateHeight()
+        })
+    },
+
 
     methods: {
 
         /**
-         *
+         * Calculcate the width of the grid.
          */
-        handleBlur () {
-            console.log('Blur')
+        calculateWidth () {
+            this.width = Math.ceil($(window).width() / 27.5)
         },
 
         /**
-         *
+         * Calculate the height of the grid.
          */
-        handleFocus () {
-            console.log('Focus')
+        calculateHeight () {
+            this.height = Math.ceil($(window).height() / 28)
         },
 
         /**
@@ -59,7 +61,7 @@ export default {
          */
         handleCellClick (event) {
             if(this.canPaint) {
-                if(this.tool == 'pencil') {
+                if(this.tool == 'pencil' && event.buttons == 1) {
                     $(event.target).css('background-color', this.color).css('border', '1px solid '+ this.color)
                 }
 
@@ -70,7 +72,7 @@ export default {
                     })
                 }
 
-                if(this.tool == 'eraser') {
+                if(this.tool == 'eraser' && event.buttons == 1) {
                     $(event.target).css('background-color', '').css('border', '')
                 }
 
@@ -117,11 +119,13 @@ export default {
     box-sizing: border-box;
     max-width: 100%;
 }
-.horizontal {
-    width: 26px;
-    float: left;
+.grid {
+    display: flex;
+    align-items: flex-end;
+    justify-content: left;
 }
 .cell {
+    flex: 1;
     height: 25px;
     width: 25px;
     border: 1px solid lightblue;

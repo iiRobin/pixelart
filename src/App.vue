@@ -87,7 +87,7 @@ export default {
          * Remove everything that has been painted.
          */
         handleRemoveAll () {
-            $(".cell").css('background-color', 'rgba(0, 0, 0, 0)').css('border', '1px solid lightblue')
+            $(".cell").css('background-color', '').css('border', '')
         },
 
         /**
@@ -132,9 +132,7 @@ html, body, #app {
     overflow-y: hidden;
 }
 .uk-sidebar {
-    width: calc(100% * 1 / 33.333);
-    box-sizing: border-box;
-    max-width: 100%;
+    width: 45px;
     background-color: lightblue;
 }
 .fas {
