@@ -1,2 +1,2 @@
-# pixelart
+# Pixelart
 Grid with squares where you are able to paint. Created with VueJS.
