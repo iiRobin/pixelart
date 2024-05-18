@@ -76,7 +76,7 @@ export default {
                     $(event.target).css('background-color', '').css('border', '')
                 }
 
-                if(this.tool == 'pipette') {
+                if(this.tool == 'pipette' && event.type === 'mousedown') {
                     this.$emit('color', $(event.target).css('background-color'))
                 }
             }
